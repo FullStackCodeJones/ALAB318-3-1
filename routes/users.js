@@ -49,3 +49,33 @@ router.patch("/:id", (req, res) => {
     res.status(404).json({ message: "User not found" });
   }
 });
+
+//Route To Create a New User
+router.post("/", (req, res) => {
+  const { name, email, age } = req.body;
+  const newUser = { id: users.length + 1, name, email, age };
+  users.push(newUser);
+  res.status(201).json(newUser);
+});
+
+//Routes To Update A User By Id
+router.patch("/:id", (req, res) => {
+  const user = users.find((user) => user.id === parseInt(req.params.id));
+  if (user) {
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+    user.age = req.body.age || user.age;
+    res.json(user);
+  } else {
+    res.status(404).json({ message: "User not found" });
+  }
+});
+
+//Route To Delete A User By ID
+
+router.delete("/:id", (req, res) => {
+  users = users.filter((user) => user.id !== parseInt(req.params.id));
+  res.status(204).send();
+});
+
+module.exports = router;
